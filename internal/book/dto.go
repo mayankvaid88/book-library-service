@@ -6,7 +6,6 @@ type CreateOrUpdateBookRequest struct {
     Description string `json:"description" validate:"omitempty,max=500"`
 }
 
-// Response DTO
 type BookResponse struct {
 	ID          int    `json:"id" example:"1"`
 	Title       string `json:"title" example:"Harry Potter"`
