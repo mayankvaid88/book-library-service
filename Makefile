@@ -5,9 +5,9 @@ int_test:
 vet:
 	go vet ./...
 build_img:
-	docker build . -t book-store-service
+	docker build -f infra/ . -t book-store-service
 run:
-	docker-compose up --detach
+	docker-compose -f infra/docker-compose.yml up --detach
 swag:
 	swag init -g cmd/main.go
 mocks:

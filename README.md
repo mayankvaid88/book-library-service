@@ -1,41 +1,37 @@
-# Book Store
+Book Store 📚
+This application provides simple CRUD (Create, Read, Update, Delete) APIs for managing books.
 
-Application exposes Simple CRUD APIs to manage the books.
+Prerequisites
+Before you get started, ensure you have the following tools installed on your system:
 
----
+Go Compiler: Essential for building and running the Go application.
 
-## Prerequisites
+Go Mockgen: Used for generating mock interfaces for testing purposes.
 
-Make sure these tools are installed:
+Go Swag: Utilized to generate Swagger API documentation.
 
-- go compiler
-- go mockgen binary (for mocking)
-- go swag for swagger documentations
-- docker
-- docker-compose
+Docker: For containerizing the application and its dependencies.
 
-## Important commands
+Docker Compose: To orchestrate and run multi-container Docker applications, like this one with its database.
 
-Run unit test cases
-make unit_test
+Important Commands
+Here are some crucial make commands to help you manage and interact with the application:
 
-Run integration test cases
-make int_test
+make unit_test: Runs all the unit test cases for the application.
 
-Build docker image 
-make build_img
+make int_test: Executes the integration test cases.
 
-App vet for static code analysis
-make vet
+make build_img: Builds the Docker image for the application.
 
-To run the app inside docker along with database
-make run
+make vet: Performs static code analysis (vetting) on the application's source code.
 
-To generate the swagger documentations
-make swag
+make run: Starts the application inside Docker along with its database.
 
-To generate mocks used in unit test cases
-make mocks
+make swag: Generates the Swagger API documentation.
 
-Database credentials has to be provided in the .env file which will be sourced while running the container. Replace the secrets with actual value in .env_sample and rename it to .env.
+make mocks: Generates the mock files used in unit test cases.
 
+Database Configuration
+Database credentials must be provided in a .env file. This file will be sourced when the application container is run.
+
+Important: Before containerizing the application, rename .env_sample to .env and replace the placeholder secrets with your actual database credentials.
