@@ -32,6 +32,6 @@ Here are some crucial `make` commands to help you manage and interact with the a
 
 ## Database Configuration
 
-**Database credentials** must be provided in a **`.env`** file. This file will be sourced when the application container is run.
+**Database credentials** must be provided in a **`.env`** file under infra folder. This file will be sourced when the application container is run.
 
 **Important**: Before containerizing the application, **rename `.env_sample` to `.env`** and replace the placeholder secrets with your actual database credentials.
