@@ -27,6 +27,7 @@ Here are some crucial `make` commands to help you manage and interact with the a
 * **`make run`**: Starts the application inside **Docker along with its database**.
 * **`make swag`**: Generates the **Swagger API documentation**.
 * **`make mocks`**: Generates the **mock files** used in unit test cases.
+* **`make coverage`**: Evaluates the **coverage** of unit test cases.
 
 ---
 

@@ -10,6 +10,8 @@ run:
 	docker-compose -f infra/docker-compose.yml up --detach
 swag:
 	swag init -g cmd/main.go
+coverage:
+	go test -cover ./...
 mocks:
 	mockgen -source=internal/book/repository.go -destination=internal/mocks/repository_mock.go
 	mockgen -source=internal/book/service.go -destination=internal/mocks/service_mock.go
