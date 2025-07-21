@@ -1,0 +1,224 @@
+definitions:
+  book.BookResponse:
+    properties:
+      author:
+        example: JK Rolling
+        type: string
+      description:
+        example: harry potter and his friends
+        type: string
+      id:
+        example: 1
+        type: integer
+      title:
+        example: Harry Potter
+        type: string
+    type: object
+  book.CreateOrUpdateBookRequest:
+    properties:
+      author:
+        maxLength: 100
+        minLength: 1
+        type: string
+      description:
+        maxLength: 500
+        type: string
+      title:
+        maxLength: 200
+        minLength: 1
+        type: string
+    required:
+    - author
+    - title
+    type: object
+  book.ErrorCode:
+    enum:
+    - BOOK_NOT_FOUND
+    - INTERNAL_SERVER_ERROR
+    - BAD_REQUEST
+    type: string
+    x-enum-varnames:
+    - BookNotFound
+    - InternalServerError
+    - BadRequest
+  book.ErrorResponse:
+    properties:
+      errorCode:
+        allOf:
+        - $ref: '#/definitions/book.ErrorCode'
+        example: BAD_REQUEST
+      errorMessage:
+        example: limit must be >=1
+        type: string
+    type: object
+  book.PaginatedBookListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/book.BookResponse'
+        type: array
+      limit:
+        example: 10
+        type: integer
+      page:
+        example: 1
+        type: integer
+      total:
+        example: 42
+        type: integer
+      totalPages:
+        example: 5
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /books:
+    get:
+      consumes:
+      - application/json
+      description: Returns a paginated list of books
+      parameters:
+      - default: 1
+        description: Page number (default 1)
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size (1–100, default 10)
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/book.PaginatedBookListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/book.ErrorResponse'
+      summary: List books with pagination
+      tags:
+      - books
+    post:
+      consumes:
+      - application/json
+      description: Add a new book record
+      parameters:
+      - description: Book data
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/book.CreateOrUpdateBookRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          headers:
+            Location:
+              description: URL of created book
+              type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/book.ErrorResponse'
+      summary: Create a new book
+      tags:
+      - books
+  /books/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a book record
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/book.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/book.ErrorResponse'
+      summary: Delete book by ID
+      tags:
+      - books
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a single book by its ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/book.BookResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/book.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/book.ErrorResponse'
+      summary: Get book by ID
+      tags:
+      - books
+    put:
+      consumes:
+      - application/json
+      description: Update existing book or create if not exists
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Book data
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/book.CreateOrUpdateBookRequest'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          headers:
+            Location:
+              description: Optional new resource URL
+              type: string
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/book.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/book.ErrorResponse'
+      summary: Update or create book by ID
+      tags:
+      - books
+swagger: "2.0"
