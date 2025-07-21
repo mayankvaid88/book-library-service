@@ -37,5 +37,5 @@ make swag
 To generate mocks used in unit test cases
 make mocks
 
-Database credentials has to be provided in the .env file which will be sourced while running the container.
+Database credentials has to be provided in the .env file which will be sourced while running the container. Replace the secrets with actual value in .env_sample and rename it to .env.
 
