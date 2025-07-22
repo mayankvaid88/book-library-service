@@ -83,6 +83,51 @@ func (m *BookHandlerTestSuite) TestList() {
     }
 }
 
+func (m *BookHandlerTestSuite) TestList_ShouldSetLimitToThresholdWhenLimitPassedIsGreaterThanThreshold() {
+        books := []book.Book{
+            {ID: 1, Title: "A", Author: "X", Description: "desc A"},
+            {ID: 2, Title: "B", Author: "Y", Description: "desc B"},
+        }
+
+    req,_ := http.NewRequest("GET", "/books?page=1&limit=500", nil)
+    w := httptest.NewRecorder()
+
+	m.mockService.EXPECT().List(req.Context(),100,0).Return(books,2,nil)
+
+    m.bookHandler.List(w, req)
+
+    res := w.Result()
+    defer res.Body.Close()
+
+    if res.StatusCode != http.StatusOK {
+        m.Suite.T().Fatalf("expected 200, got %d", res.StatusCode)
+    }
+
+    var body struct {
+        Page       int                   `json:"page"`
+        Limit      int                   `json:"limit"`
+        Total      int                   `json:"total"`
+        TotalPages int                   `json:"totalPages"`
+        Data       []book.BookResponse `json:"data"`
+    }
+    if err := json.NewDecoder(res.Body).Decode(&body); err != nil {
+        m.Suite.T().Fatalf("invalid JSON response: %v", err)
+    }
+
+    if body.Page != 1 || body.Limit != 100 {
+        m.Suite.T().Errorf("bad page/limit: got %d/%d", body.Page, body.Limit)
+    }
+    if body.Total != 2 {
+        m.Suite.T().Errorf("expected total=2, got %d", body.Total)
+    }
+    if body.TotalPages != int(math.Ceil(2/5.0)) {
+        m.Suite.T().Errorf("bad totalPages: got %d", body.TotalPages)
+    }
+    if len(body.Data) != 2 {
+        m.Suite.T().Errorf("expected 2 books, got %d", len(body.Data))
+    }
+}
+
 func (m *BookHandlerTestSuite) TestList_ShouldThrowErrorWhenServiceReturnsError() {
     internalServerErr := book.GetErrorResponseByCode(book.InternalServerError)
     req := httptest.NewRequest("GET", "/books?page=1&limit=5", nil)

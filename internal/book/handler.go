@@ -13,6 +13,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+var maxLimit int = 100
+
 type BookHandler struct {
 	svc BookService
 	val validator.Validate
@@ -46,6 +48,7 @@ func (h *BookHandler) List(w http.ResponseWriter, r *http.Request) {
 		logrus.Error("invalid limit number provided ",q.Get("limit"))
 		sendError(w,*GetErrorResponseByCode(BadRequest))
 	}
+	limit = min(limit,maxLimit)
 	if page < 1 { page = 1 }
 	if limit < 1 || limit > 100 { limit = 10 }
 	offset := (page - 1) * limit

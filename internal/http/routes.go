@@ -14,8 +14,8 @@ func RegisterRoutes(r *mux.Router, db *sql.DB) {
 	handler := book.NewBookHandler(bookService)
 
 	r.HandleFunc("/books", handler.List).Methods(http.MethodGet)
-	r.HandleFunc("/books/{id:[0-9]+}", handler.Get).Methods(http.MethodGet)
+	r.HandleFunc("/books/{id}", handler.Get).Methods(http.MethodGet)
 	r.HandleFunc("/books", handler.Create).Methods(http.MethodPost)
-	r.HandleFunc("/books/{id:[0-9]+}", handler.Update).Methods(http.MethodPut)
-	r.HandleFunc("/books/{id:[0-9]+}", handler.Delete).Methods(http.MethodDelete)
+	r.HandleFunc("/books/{id}", handler.Update).Methods(http.MethodPut)
+	r.HandleFunc("/books/{id}", handler.Delete).Methods(http.MethodDelete)
 }
