@@ -1,4 +1,4 @@
-# Book Store 📚
+# Book Library Service 📚
 
 This application provides simple **CRUD (Create, Read, Update, Delete)** APIs for managing books.
 
