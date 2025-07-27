@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"book-store/internal/config"
@@ -10,7 +10,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func Main() {
+func main(){
 	cfg, err := config.LoadConfig("config.json")
 	if err != nil {
 		logrus.Fatalf("config load: %v", err)
